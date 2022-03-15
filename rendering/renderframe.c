@@ -32,7 +32,7 @@ int rendersky(double pos[3], double dir[3]) {
 int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double pos[8]) {
 	struct winsize s;
 	ioctl(0, TIOCGWINSZ, &s);
-	int ws[2] = {s.ws_row - 5, s.ws_col};
+	int ws[2] = {s.ws_row, s.ws_col};
 	double up[3] = {0, 1, 0};
 	double dir0[3];
 	double xdir[3];
@@ -77,11 +77,24 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 				}
 				int block[3];
 				for (int i = 0; i < 3; i++) block[i] = (int) hitblock[i];
+				double sundir[3] = {0.5, 0.6, 0.3};
+				double sunhitpos[3] = {-1};
+				for (int i = 0; i < 3; i++) hitblock[i] -= 0.001 * dir[i];
+				raytrace(world, hitblock, sundir, renderdist, sunhitpos);
+				int sunhit = 2 - (sunhitpos[0] == -1);
 				switch (world[block[0]][block[1]][block[2]]) {
-					case 33: printpix(7, 8 + normal); break;
-					case 34: printpix(2, 7 + normal); break;
-					case 35: printpix(1, 10 + normal); break;
-					default: printpix(6, 15); break;
+					case 33: printpix(7, (8 + normal) / sunhit); break;
+					case 34: printpix(2, (5 + normal / 2) / sunhit); break;
+					case 35: printpix(1, (10 + normal) / sunhit); break;
+					case 48: printpix(0, (12 + normal) / sunhit); break;
+					case 49: printpix(1, (12 + normal) / sunhit); break;
+					case 50: printpix(2, (12 + normal) / sunhit); break;
+					case 51: printpix(3, (12 + normal) / sunhit); break;
+					case 52: printpix(4, (12 + normal) / sunhit); break;
+					case 53: printpix(5, (12 + normal) / sunhit); break;
+					case 54: printpix(6, (12 + normal) / sunhit); break;
+					case 55: printpix(7, (12 + normal) / sunhit); break;
+					default: printpix(5, 15); break;
 				}
 			}
 		}

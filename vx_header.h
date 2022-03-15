@@ -48,7 +48,7 @@ int writechunk(char world[2 * renderdist][worldheight][2 * renderdist], const in
 // move chunk in map to compensate for player movement
 int copychunk(char world[2 * renderdist][worldheight][2 * renderdist], const int chunkpos0[2], const int chunkpos1[2]);
 // Player-world interaction:
-int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], double pp[8], char * input);
+int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], double pp[8], char * input, char * playerdata);
 
 // Rendering:
 

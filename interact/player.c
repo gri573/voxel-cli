@@ -1,6 +1,6 @@
 #include "../vx_header.h"
 
-int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], double pp[8], char * input) {
+int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], double pp[8], char * input, char * playerdata) {
 	*input = fgetc(stdin);
 	if (*input == 27) return 1;
 	for (int i = 0; i < 2; i++) pp[2 * i + 5] *= 0.4;
@@ -34,6 +34,10 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 		pp[i+5] += dir[i];
 		pp[i] += 0.2 * pp[i+5];
 	}
+	
+	if (*input > 47 && *input < 56) *playerdata = *input;
+	
+	if (*input != 'o' && *input != 'u' && *input != 'p') return 0;
 	double dirfacing[3] = {cos(pp[3]) * sin(pp[4]), cos(pp[4]), sin(pp[3]) * sin(pp[4])};
 	int worldoffset[2] = {((int) pp[0] - renderdist) / chunksize, ((int) pp[2] - renderdist) / chunksize};
 	double pointedloc[3] = {-1};
@@ -57,7 +61,10 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 		}
 		if (*input == 'o') {
 			for (int i = 0; i < 3; i++) pointedblock[i] += normal[i];
-			world[pointedblock[0]][pointedblock[1]][pointedblock[2]] = 35;
+			world[pointedblock[0]][pointedblock[1]][pointedblock[2]] = *playerdata;
+		}
+		if (*input == 'p') {
+			*playerdata = world[pointedblock[0]][pointedblock[1]][pointedblock[2]];
 		}
 	}
 	printf("\033[1;0m\n\rLooking at block: (%d, %d, %d)\n\r", pointedblock[0], pointedblock[1], pointedblock[2]);
