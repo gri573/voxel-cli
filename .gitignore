@@ -1,0 +1,3 @@
+**/*.o
+voxel_cli
+world/*
