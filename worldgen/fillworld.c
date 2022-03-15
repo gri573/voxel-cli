@@ -65,6 +65,7 @@ int copychunk(char world[2 * renderdist][worldheight][2 * renderdist], const int
 			}
 		}
 	}
+	return 0;
 }
 
 int updateworld(char world[2 * renderdist][worldheight][2 * renderdist], char loadedchunks[2 * renderdist / chunksize][2 * renderdist / chunksize], double pp[8], double ppp[8]) {

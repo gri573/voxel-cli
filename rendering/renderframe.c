@@ -51,9 +51,7 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 		printf("\n\r");
 		double yoffset[3];
 		for (int i = 0; i < 3; i++) yoffset[i] = 4 * ydir[i] * ((double) y / ws[1] - 0.5 * ws[0] / ws[1]);
-		if (y < 10) printf("\033[1;0m %d", y);
-		else printf("\033[1;0m%d", y);
-		for (int x = 2; x < ws[1]; x++) {
+		for (int x = 0; x < ws[1]; x++) {
 			double dir[3] = {dir0[0], dir0[1], dir0[2]};
 			double xoffset[3];
 			for (int i = 0; i < 3; i++) xoffset[i] = 2 * xdir[i] * ((double) x / ws[1] - 0.5);
