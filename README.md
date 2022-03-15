@@ -1,4 +1,4 @@
-### Voxel-Cli Sandbox
+# Voxel-Cli Sandbox
 
 This is a small open-world voxel sandbox game running in a linux terminal.
 
