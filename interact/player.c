@@ -37,9 +37,9 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 	
 	if (*input > 47 && *input < 56) *playerdata = *input;
 	
-	if (*input != 'o' && *input != 'u' && *input != 'p') return 0;
+	if (*input != 'o' && *input != 'u' && *input != 'p' && *input != 't') return 0;
 	double dirfacing[3] = {cos(pp[3]) * sin(pp[4]), cos(pp[4]), sin(pp[3]) * sin(pp[4])};
-	int worldoffset[2] = {((int) pp[0] - renderdist) / chunksize, ((int) pp[2] - renderdist) / chunksize};
+	int worldoffset[2] = {((int) (pp[0] + 500 * chunksize - renderdist)) / chunksize - 500, ((int) (pp[2] + 500 * chunksize - renderdist)) / chunksize - 500};
 	double pointedloc[3] = {-1};
 	double pp0[3] = {pp[0] - worldoffset[0] * chunksize, pp[1], pp[2] - worldoffset[1] * chunksize};
 	raytrace(world, pp0, dirfacing, 5.0, pointedloc);
@@ -65,6 +65,12 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 		}
 		if (*input == 'p') {
 			*playerdata = world[pointedblock[0]][pointedblock[1]][pointedblock[2]];
+		}
+		if (*input == 't') {
+			pointedblock[0] -= 2;
+			pointedblock[2] -= 2;
+			for (int i = 0; i < 3; i++) pointedblock[i] += normal[i];
+			printf("%d\n\r", placefeature(world, "worldgen/structures/tree_0.vxs", pointedblock));
 		}
 	}
 	printf("\033[1;0m\n\rLooking at block: (%d, %d, %d)\n\r", pointedblock[0], pointedblock[1], pointedblock[2]);

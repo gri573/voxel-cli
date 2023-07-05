@@ -33,6 +33,8 @@ void cross(double x[3], double y[3], double res[3]);
 int genchunk(char world[2 * renderdist][worldheight][2 * renderdist], int chunkID[2], int chunkpos[2]);
 // height generation
 int terrainheight(int coords[2]);
+// feature placement
+int placefeature(char world[2 * renderdist][worldheight][2 * renderdist], char feature[], int coords[3]);
 // load world on startup
 int loadworld(char world[2 * renderdist][worldheight][2 * renderdist], char loadedchunks[2 * renderdist / chunksize][2 * renderdist / chunksize], double pp[8]);
 // save world on exit
@@ -53,13 +55,13 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 // Rendering:
 
 //print pixel (brightness goes from 0 to 15)
-int printpix(char col, char brightness);
+int printpix(char col, int brightness, char* frame, int* loc);
 // voxel ray tracer
 int raytrace(char world[2 * renderdist][worldheight][2 * renderdist], double pos[3], double dir[3], double dist, double hitpos[3]);
 // render entire frame
 int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double pos[8]);
 // render sky
-int rendersky(double pos[3], double dir[3]);
+int rendersky(double pos[3], double dir[3], char* frame, int* loc);
 
 
 #define pi 3.141592654

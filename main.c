@@ -21,7 +21,6 @@ int main() {
 		if (playerinput == 27) break;
 		updateworld(world, loadedchunks, playerpos, previousplayerpos);
 		renderframe(world, playerpos);
-		//playerinput = 27;
 	}
 	saveworld(world, loadedchunks, playerpos);
 //	system("stty echo");
