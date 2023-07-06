@@ -1,5 +1,5 @@
 #include "../vx_header.h"
-
+#include <tgmath.h>
 int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], double pp[8], char * input, char * playerdata) {
 	*input = fgetc(stdin);
 	if (*input == 27) return 1;
@@ -36,12 +36,21 @@ int playeractions(char world[2 * renderdist][worldheight][2 * renderdist], doubl
 	}
 	
 	if (*input > 47 && *input < 56) *playerdata = *input;
+	int worldoffset[2] = {((int) (pp[0] + 500 * chunksize - renderdist)) / chunksize - 500, ((int) (pp[2] + 500 * chunksize - renderdist)) / chunksize - 500};
+	double pp0[3] = {pp[0] - worldoffset[0] * chunksize, pp[1], pp[2] - worldoffset[1] * chunksize};
+	int pp1[3] = {(int) pp0[0], (int) (pp0[1] - 1.5), (int) pp0[2]};
+	if (world[pp1[0]][pp1[1]][pp1[2]] != ' ' && world[pp1[0]][pp1[1]][pp1[2]]) {
+		pp[6] = fmax(pp[6], 0);
+		pp[1] += 0.99 - (pp0[1] - 1.5 - (int)(pp0[1] - 1.5));
+		if (pp1[1] < worldheight - 1 && world[pp1[0]][pp1[1]+1][pp1[2]] != ' ' && world[pp1[0]][pp1[1]+1][pp1[2]])
+			pp[1] += 0.5;
+	} else {
+		pp[6] -= 0.3;
+	}
 	
 	if (*input != 'o' && *input != 'u' && *input != 'p' && *input != 't') return 0;
 	double dirfacing[3] = {cos(pp[3]) * sin(pp[4]), cos(pp[4]), sin(pp[3]) * sin(pp[4])};
-	int worldoffset[2] = {((int) (pp[0] + 500 * chunksize - renderdist)) / chunksize - 500, ((int) (pp[2] + 500 * chunksize - renderdist)) / chunksize - 500};
 	double pointedloc[3] = {-1};
-	double pp0[3] = {pp[0] - worldoffset[0] * chunksize, pp[1], pp[2] - worldoffset[1] * chunksize};
 	raytrace(world, pp0, dirfacing, 5.0, pointedloc);
 	int pointedblock[3] = {(int) pointedloc[0], (int) pointedloc[1], (int) pointedloc[2]};
 	int normal[3] = {0};

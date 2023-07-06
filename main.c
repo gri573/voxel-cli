@@ -18,7 +18,12 @@ int main() {
 		double previousplayerpos[8];
 		for (int i = 0; i < 8; i++) previousplayerpos[i] = playerpos[i];
 		playeractions(world, playerpos, &playerinput, &playerdata);
-		if (playerinput == 27) break;
+		if (playerinput == 27) {
+			printf("really quit? [y/N] ");
+			int c = fgetc(stdin);
+			if (c == 'y' || c == 'Y')
+				break;
+		}
 		updateworld(world, loadedchunks, playerpos, previousplayerpos);
 		renderframe(world, playerpos);
 	}

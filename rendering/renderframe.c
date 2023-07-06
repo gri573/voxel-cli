@@ -16,14 +16,15 @@ white:	7
 char brightnessencode[] = " -*aH$@#";
 
 int printpix(char col, int brightness, char* frame, int* loc) {
+	if (brightness >= 16 || brightness < 0) {
+		return -1;
+	}
 	char printstring[] = "\033[1;30m\033[1;40m_";
 	printstring[5 + 7 * (brightness >= 8)] = col + 48;
 	if (brightness >= 8) brightness = 15 - brightness;
 	printstring[14] = brightnessencode[brightness];
-	//printf("%s", printstring);
 	for (int k = 0; k < 15; k++) frame[15 * (*loc) + k] = printstring[k];
 	(*loc)++;
-	//printf("%d ", *loc);
 	return 0;
 }
 
@@ -36,7 +37,7 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 	struct winsize s;
 	ioctl(0, TIOCGWINSZ, &s);
 	int ws[2] = {s.ws_row, s.ws_col};
-	char frame[ws[0] * (ws[1] + 1) * 18];
+	char frame[ws[0] * (ws[1] + 1) * 18 + 1];
 	int K = 0;
 	for (int k = 0; k < ws[0] * (ws[1] + 1) * 18; k++) frame[k] = 0;
 	double up[3] = {0, 1, 0};
@@ -54,7 +55,6 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 	int worldoffset[2] = {((int) (pos[0] + 500 * chunksize - renderdist)) / chunksize - 500, ((int) (pos[2] + 500 * chunksize - renderdist)) / chunksize - 500};
 	double pos0[3] = {pos[0] - worldoffset[0] * chunksize, pos[1], pos[2] - worldoffset[1] * chunksize};
 	for (int y = 0; y < ws[0]; y++) {
-		//printf("\n\r");
 		frame[15*K] = '\n';
 		for (int k = 1; k < 15; k++) frame[15*K + k] = '\r';
 		K++;
@@ -71,7 +71,7 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 			if (hitblock[0] == -1) {
 				rendersky(pos, dir, frame, &K);
 			} else {
-				int normal;
+				int normal = 0;
 				for (int i = 0; i < 3; i++) {
 					double dfc = modd(hitblock[i], 1.0) - 0.5;
 					if (dfc > 0) dfc *= -1;
@@ -121,6 +121,8 @@ int renderframe(char world[2 * renderdist][worldheight][2 * renderdist], double 
 			}
 		}
 	}
+	frame[ws[0] * (ws[1] + 1) * 18] = 0;
+	frame[ws[0] * (ws[1] + 1) * 18 - 1] = '\r';
 	printf(frame);
 	return 0;
 }

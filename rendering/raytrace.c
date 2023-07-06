@@ -29,7 +29,7 @@ int raytrace(char world[2 * renderdist][worldheight][2 * renderdist], double pos
 		}
 		if (pos[1] < 0 || pos[1] > worldheight || min(pos[0], pos[2]) < 0 || max(pos[0], pos[2]) >= 2 * renderdist) break;
 		
-		if (world[blockpos[0]][blockpos[1]][blockpos[2]] != 32 && world[blockpos[0]][blockpos[1]][blockpos[2]] != 0) {
+		if (world[blockpos[0]][blockpos[1]][blockpos[2]] != ' ' && world[blockpos[0]][blockpos[1]][blockpos[2]] != 0) {
 			found = 1;
 			for (int i = 0; i < 3; i++) hitpos[i] = pos[i];
 			break;

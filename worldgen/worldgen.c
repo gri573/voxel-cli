@@ -1,5 +1,14 @@
 #include "../vx_header.h"
 
+double hash21(int p[2]) {
+	unsigned int* p_u = (unsigned int*) p;
+	unsigned int q[2] = {p_u[0], p_u[1]};
+	q[0] *= 1597334673U;
+	q[1] *= 3812015801U;
+	unsigned int n = (q[0] ^ q[1]) * 1597334673U;
+	return (double) n / 0xffffffffu;
+}
+
 int genchunk(char world[2 * renderdist][worldheight][2 * renderdist], int chunkID[2], int chunkpos[2]) {
 	int cworldpos[2] = {chunkID[0] * chunksize, chunkID[1] * chunksize};
 	for (int x = 0; x < chunksize; x++) {
@@ -16,6 +25,28 @@ int genchunk(char world[2 * renderdist][worldheight][2 * renderdist], int chunkI
 				}
 			}
 		}
+	}
+	double p = hash21(cworldpos);
+	if (p > 0.7) {
+		int hashval[2];
+		for (int i = 0; i < 2; i++)
+			hashval[i] = cworldpos[i];
+		double treepos0[2];
+		for (int i = 0; i < 2; i++) {
+			treepos0[i] = hash21(hashval);
+			hashval[0]++;
+		}
+		int treepos[3];
+		int treewpos[2];
+		for (int i = 0; i < 2; i++) {
+			treepos[i] = (int)((0.3 + 0.4 * treepos0[i]) * chunksize);
+			treewpos[i] = treepos[i] + cworldpos[i];
+		}
+		int height = terrainheight(treewpos);
+		treepos[2] = treepos[1] + chunkpos[1] - 2;
+		treepos[0] += chunkpos[0] - 2;
+		treepos[1] = height;
+		placefeature(world, "worldgen/structures/tree_0.vxs", treepos);
 	}
 	return 0;
 }

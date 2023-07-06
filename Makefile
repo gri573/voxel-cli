@@ -1,6 +1,7 @@
 CFLAGS += -Wall -Wextra
+#CFLAGS += -fsanitize=address -ggdb
 #LDFLAGS +=
-#LDLIBS += -lncurses
+LDLIBS += -lncurses -lm
 ALL_H = $(wildcard *.h)
 ROOT_C = $(wildcard *.c)
 WORLDGEN_C = $(wildcard worldgen/*.c)
@@ -14,7 +15,7 @@ all: voxel_cli
 $(ALL_O): $(ALL_H)
 
 voxel_cli: $(ALL_O)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ $(LDLIBS) -o $@
 
 clean:
 	rm -f $(ALL_O)
